@@ -14,10 +14,12 @@ module ActiveLinkTo
       name          = capture(&block)
       options       = args[0] || {}
       html_options  = args[1] || {}
+      icon_class    = args[2] || {}
     else
       name          = args[0]
       options       = args[1] || {}
       html_options  = args[2] || {}
+      icon_class    = args[3] || {}
     end
     url = url_for(options)
 
@@ -41,7 +43,9 @@ module ActiveLinkTo
     link = if active_options[:active_disable] === true && is_active_link?(url, active_options[:active])
       content_tag(:span, name, link_options)
     else
-      link_to(name, url, link_options)
+      link_to(url, link_options) do
+        icon_class.present? ? content_tag(:i, '', :class => icon_class) << name : name
+      end
     end
 
     wrap_tag ? content_tag(wrap_tag, link, :class => css_class) : link
